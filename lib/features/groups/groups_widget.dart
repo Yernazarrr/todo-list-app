@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_list_app/features/groups/groups_widget_model.dart';
 
-class GroupsWidget extends StatelessWidget {
+class GroupsWidget extends StatefulWidget {
   const GroupsWidget({super.key});
 
-  void showForm(BuildContext context) {
-    Navigator.of(context).pushNamed('/groups/form');
+  @override
+  State<GroupsWidget> createState() => _GroupsWidgetState();
+}
+
+class _GroupsWidgetState extends State<GroupsWidget> {
+  final _model = GroupsWidgetModel();
+
+  @override
+  Widget build(BuildContext context) {
+    return GroupsWidgetModelProvider(
+      model: _model,
+      child: const _GroupsWidgetBody(),
+    );
   }
+}
+
+class _GroupsWidgetBody extends StatelessWidget {
+  const _GroupsWidgetBody();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +34,8 @@ class GroupsWidget extends StatelessWidget {
         child: _GroupListWidget(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showForm(context),
+        onPressed: () =>
+            GroupsWidgetModelProvider.of(context)?.model.showForm(context),
         child: const Icon(Icons.add),
       ),
     );
@@ -30,8 +47,11 @@ class _GroupListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final groupsCount =
+        GroupsWidgetModelProvider.of(context)?.model.groups.length ?? 0;
+
     return ListView.separated(
-      itemCount: 5,
+      itemCount: groupsCount,
       itemBuilder: (context, index) => _GroupListRowWidget(indexInList: index),
       separatorBuilder: (context, index) => const Divider(height: 1),
     );
@@ -44,30 +64,26 @@ class _GroupListRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = GroupsWidgetModelProvider.of(context)!.model;
+    final group = model.groups[indexInList];
+
     return Slidable(
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) => model.deleteGroup(indexInList),
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
           ),
-          // SlidableAction(
-          //   onPressed: (context) {},
-          //   backgroundColor: const Color(0xFF21B7CA),
-          //   foregroundColor: Colors.white,
-          //   icon: Icons.share,
-          //   label: 'Share',
-          // ),
         ],
       ),
-      child: const ListTile(
-        title: Text('Some group'),
-        trailing: Icon(Icons.chevron_right),
+      child: ListTile(
+        title: Text(group.name),
+        trailing: const Icon(Icons.chevron_right),
       ),
     );
   }
