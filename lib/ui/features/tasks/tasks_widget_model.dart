@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:todo_list_app/domain/entity/group/group.dart';
 import 'package:todo_list_app/domain/entity/task/task.dart';
+import 'package:todo_list_app/ui/navigation/main_navigation.dart';
 
 class TasksWidgetModel extends ChangeNotifier {
   int groupKey;
@@ -43,7 +44,8 @@ class TasksWidgetModel extends ChangeNotifier {
   }
 
   void showForm(BuildContext context) {
-    Navigator.of(context).pushNamed('/groups/tasks/form', arguments: groupKey);
+    Navigator.of(context)
+        .pushNamed(MainNavigationRouteNames.tasksForm, arguments: groupKey);
   }
 
   void _loadGroup() async {
