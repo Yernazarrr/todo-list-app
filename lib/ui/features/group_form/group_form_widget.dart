@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/features/group_form/group_form_widget_model.dart';
+import 'package:todo_list_app/ui/features/group_form/group_form_widget_model.dart';
 
 class GroupFormWidget extends StatefulWidget {
   const GroupFormWidget({super.key});
@@ -51,6 +51,7 @@ class _GroupNameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = GroupFormWidgetModelProvider.of(context)?.model;
     return TextField(
+      autofocus: true,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
         hintText: 'Name of group',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:todo_list_app/domain/entity/group.dart';
+import 'package:todo_list_app/domain/entity/group/group.dart';
 
 class GroupFormWidgetModel {
   var groupName = '';
@@ -38,6 +38,6 @@ class GroupFormWidgetModelProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(GroupFormWidgetModelProvider oldWidget) {
-    return true;
+    return false;
   }
 }

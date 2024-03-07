@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todo_list_app/features/group_form/group_form_widget.dart';
-import 'package:todo_list_app/features/groups/groups_widget.dart';
-import 'package:todo_list_app/theme/theme.dart';
+import 'package:todo_list_app/ui/features/group_form/group_form_widget.dart';
+import 'package:todo_list_app/ui/features/groups/groups_widget.dart';
+import 'package:todo_list_app/ui/features/tasks/tasks_widget.dart';
+import 'package:todo_list_app/ui/theme/theme.dart';
+import 'package:todo_list_app/ui/features/task_form/task_form_widget.dart';
+import 'package:todo_list_app/ui/navigation/main_navigation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +23,11 @@ class MainApp extends StatelessWidget {
       title: 'To Do List App',
       theme: theme,
       routes: {
-        '/groups': (context) => const GroupsWidget(),
-        '/groups/form': (context) => const GroupFormWidget(),
+        MainNavigationRouteNames.groups: (context) => const GroupsWidget(),
+        MainNavigationRouteNames.groupsForm: (context) =>
+            const GroupFormWidget(),
+        MainNavigationRouteNames.tasks: (context) => const TasksWidget(),
+        MainNavigationRouteNames.tasksForm: (context) => const TaskFormWidget(),
       },
       initialRoute: '/groups',
     );

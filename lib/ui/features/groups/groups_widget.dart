@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_list_app/features/groups/groups_widget_model.dart';
+import 'package:todo_list_app/ui/features/groups/groups_widget_model.dart';
 
 class GroupsWidget extends StatefulWidget {
   const GroupsWidget({super.key});
@@ -71,7 +71,6 @@ class _GroupListRowWidget extends StatelessWidget {
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
-          // A SlidableAction can have an icon and/or a label.
           SlidableAction(
             onPressed: (context) => model.deleteGroup(indexInList),
             backgroundColor: const Color(0xFFFE4A49),
@@ -84,6 +83,7 @@ class _GroupListRowWidget extends StatelessWidget {
       child: ListTile(
         title: Text(group.name),
         trailing: const Icon(Icons.chevron_right),
+        onTap: () => model.showTasks(context, indexInList),
       ),
     );
   }
