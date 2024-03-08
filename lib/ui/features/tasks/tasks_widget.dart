@@ -37,8 +37,8 @@ class _TasksWidgetState extends State<TasksWidget> {
 
   @override
   void dispose() async {
-    await _model.dispose();
     super.dispose();
+    await _model.dispose();
   }
 }
 

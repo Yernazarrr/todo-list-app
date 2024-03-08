@@ -16,7 +16,7 @@ class TaskFormWidgetModel {
     final taskBox = await BoxManager.instance.openTaskBox(groupKey);
     await taskBox.add(task);
 
-    // await BoxManager.instance.closeBox(taskBox);
+    await BoxManager.instance.closeBox(taskBox);
 
     if (!context.mounted) return;
     Navigator.of(context).pop();

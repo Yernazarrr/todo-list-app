@@ -13,6 +13,8 @@ class GroupFormWidgetModel {
     final group = Group(name: groupName);
     await groupBox.add(group);
 
+    await BoxManager.instance.closeBox(groupBox);
+
     if (!context.mounted) return;
     Navigator.of(context).pop();
   }

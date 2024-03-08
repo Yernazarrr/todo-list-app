@@ -22,8 +22,8 @@ class _GroupsWidgetState extends State<GroupsWidget> {
 
   @override
   void dispose() async {
-    await _model.dispose();
     super.dispose();
+    await _model.dispose();
   }
 }
 
