@@ -14,7 +14,7 @@ final theme = ThemeData(
     ),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: Colors.indigo,
+    backgroundColor: Colors.blue,
     foregroundColor: Colors.white,
   ),
 );
