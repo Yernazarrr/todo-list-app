@@ -1,71 +1,64 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todo_list_app/domain/entity/group/group.dart';
+import 'package:todo_list_app/domain/data_provider/box_manager.dart';
 import 'package:todo_list_app/domain/entity/task/task.dart';
+import 'package:todo_list_app/ui/features/tasks/tasks_widget.dart';
 import 'package:todo_list_app/ui/navigation/main_navigation.dart';
 
 class TasksWidgetModel extends ChangeNotifier {
-  int groupKey;
+  TasksWidgetConfiguration configuration;
+  ValueListenable<Object>? _listenableBox;
 
-  late final Future<Box<Group>> _groupBox;
-  Group? _group;
-  Group? get group => _group;
+  late final Future<Box<Task>> _taskBox;
 
   var _tasks = <Task>[];
   List<Task> get tasks => _tasks.toList();
 
-  TasksWidgetModel({required this.groupKey}) {
+  TasksWidgetModel({required this.configuration}) {
     _setup();
   }
 
-  void _setupListen() async {
-    final box = await _groupBox;
-    _readTasks();
-    box.listenable(keys: <dynamic>[groupKey]).addListener(() => _readTasks());
-  }
-
-  void _readTasks() {
-    _tasks = _group?.tasks ?? <Task>[];
-    notifyListeners();
-  }
-
-  void deleteTask(int groupIndex) async {
-    await _group?.tasks?.deleteFromHive(groupIndex);
-    notifyListeners();
-  }
-
-  void toggleDone(int groupIndex) async {
-    final task = group?.tasks?[groupIndex];
-
-    final currentState = task?.isDone ?? false;
-    task?.isDone = !currentState;
-    task?.save();
-    notifyListeners();
-  }
-
+  //Показываем форму для таска
   void showForm(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(MainNavigationRouteNames.tasksForm, arguments: groupKey);
+    Navigator.of(context).pushNamed(
+      MainNavigationRouteNames.tasksForm,
+      arguments: configuration.groupKey,
+    );
   }
 
-  void _loadGroup() async {
-    final box = await _groupBox;
-    _group = box.get(groupKey);
+  //Настраиваем бокс тасков, считаем уже существующие таски
+  Future<void> _setup() async {
+    _taskBox = BoxManager.instance.openTaskBox(configuration.groupKey);
+
+    await _readTasksFromHive();
+    _listenableBox = (await _taskBox).listenable();
+    _listenableBox?.addListener(_readTasksFromHive);
+  }
+
+  //Считаем таски с Hive
+  Future<void> _readTasksFromHive() async {
+    _tasks = (await _taskBox).values.toList();
     notifyListeners();
   }
 
-  void _setup() {
-    if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(GroupAdapter());
-    }
+  //Удаляем таск по индексу
+  Future<void> deleteTask(int taskIndex) async {
+    await (await _taskBox).deleteAt(taskIndex);
+  }
 
-    _groupBox = Hive.openBox<Group>('groupBox');
-    if (!Hive.isAdapterRegistered(2)) {
-      Hive.registerAdapter(TaskAdapter());
-    }
-    Hive.openBox<Task>('taskBox');
-    _loadGroup();
-    _setupListen();
+  Future<void> toggleDone(int taskIndex) async {
+    final task = (await _taskBox).getAt(taskIndex);
+    task?.isDone = !task.isDone;
+    await task?.save();
+  }
+
+  //Удаляем подписку и закрываем бокс
+  @override
+  Future<void> dispose() async {
+    _listenableBox?.removeListener(_readTasksFromHive);
+    await BoxManager.instance.closeBox(await _taskBox);
+    super.dispose();
   }
 }
 

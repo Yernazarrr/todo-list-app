@@ -27,7 +27,7 @@ class _GroupFormWidgetBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New group'),
+        title: const Text('Новая группа'),
       ),
       body: const Center(
         child: Padding(
@@ -54,7 +54,7 @@ class _GroupNameWidget extends StatelessWidget {
       autofocus: true,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
-        hintText: 'Name of group',
+        hintText: 'Имя группы',
       ),
       onChanged: (value) => model?.groupName = value,
       onEditingComplete: () => model?.saveGroup(context),

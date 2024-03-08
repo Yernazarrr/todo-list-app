@@ -34,7 +34,7 @@ class _TaskFormWidgetBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New task'),
+        title: const Text('Новая задача'),
       ),
       body: const Center(
         child: Padding(
@@ -64,7 +64,7 @@ class _TaskTextWidget extends StatelessWidget {
       expands: true,
       decoration: const InputDecoration(
         border: InputBorder.none,
-        hintText: 'Text of task',
+        hintText: 'Текст задачи',
       ),
       onChanged: (value) => model?.taskText = value,
       onEditingComplete: () => model?.saveTask(context),

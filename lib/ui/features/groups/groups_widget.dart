@@ -19,6 +19,12 @@ class _GroupsWidgetState extends State<GroupsWidget> {
       child: const _GroupsWidgetBody(),
     );
   }
+
+  @override
+  void dispose() async {
+    await _model.dispose();
+    super.dispose();
+  }
 }
 
 class _GroupsWidgetBody extends StatelessWidget {
@@ -28,7 +34,7 @@ class _GroupsWidgetBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Groups'),
+        title: const Text('Группы'),
       ),
       body: const SafeArea(
         child: _GroupListWidget(),
@@ -76,7 +82,7 @@ class _GroupListRowWidget extends StatelessWidget {
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
+            label: 'Удалить',
           ),
         ],
       ),

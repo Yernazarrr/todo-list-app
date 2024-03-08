@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todo_list_app/ui/features/tasks/tasks_widget_model.dart';
 
-class TasksWidget extends StatefulWidget {
+class TasksWidgetConfiguration {
   final int groupKey;
-  const TasksWidget({super.key, required this.groupKey});
+  final String title;
+
+  TasksWidgetConfiguration({required this.groupKey, required this.title});
+}
+
+class TasksWidget extends StatefulWidget {
+  final TasksWidgetConfiguration configuration;
+  const TasksWidget({super.key, required this.configuration});
 
   @override
   State<TasksWidget> createState() => _TasksWidgetState();
@@ -16,7 +23,7 @@ class _TasksWidgetState extends State<TasksWidget> {
   @override
   void initState() {
     super.initState();
-    _model = TasksWidgetModel(groupKey: widget.groupKey);
+    _model = TasksWidgetModel(configuration: widget.configuration);
   }
 
   @override
@@ -27,6 +34,12 @@ class _TasksWidgetState extends State<TasksWidget> {
       child: const TasksWidgetBody(),
     );
   }
+
+  @override
+  void dispose() async {
+    await _model.dispose();
+    super.dispose();
+  }
 }
 
 class TasksWidgetBody extends StatelessWidget {
@@ -35,11 +48,11 @@ class TasksWidgetBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = TasksWidgetModelProvider.of(context)?.model;
-    final groupTitle = model?.group?.name;
+    final groupTitle = model?.configuration.title ?? 'Задачи';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('$groupTitle'),
+        title: Text(groupTitle),
       ),
       body: const _TasksListWidget(),
       floatingActionButton: FloatingActionButton(
@@ -89,7 +102,7 @@ class _TasksListRowWidget extends StatelessWidget {
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
+            label: 'Удалить',
           ),
         ],
       ),
